@@ -26,9 +26,11 @@ prepare:
 	sudo apt-get update -qq
 	sudo apt-get install -qq -y curl wget zip unzip jq python3 virtualenv crudini
 
+	make create-python-virtualenv
 	make install-terraform
 	make install-vault
 	make install-aws-cli
+	make install-ansible
 
 #-- Fix permissions
 	chmod +x $(ENV_DIR)/bin/*
@@ -42,6 +44,9 @@ prepare:
 ##
 # Installers
 ##
+create-python-virtualenv:
+	virtualenv -p python3 $(PY_ENV_DIR)
+
 install-terraform:
 	mkdir -p $(ENV_DIR)/bin
 	wget -O $(ENV_DIR)/bin/terraform.zip https://releases.hashicorp.com/terraform/$(TERRAFORM_VERSION)/terraform_$(TERRAFORM_VERSION)_linux_amd64.zip
@@ -59,9 +64,12 @@ install-vault:
 	@echo "\n# Hashicorp Vault installed!\n"
 
 install-aws-cli:
-	virtualenv -p python3 $(PY_ENV_DIR)
 	. $(PY_ENV_DIR)/bin/activate && \
 		pip3 install awscli --upgrade
+
+install-ansible:
+	. $(PY_ENV_DIR)/bin/activate && \
+		pip install ansible --upgrade
 
 
 ##
