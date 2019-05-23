@@ -1,0 +1,7 @@
+./config
+.env/
+
+ansible/*.retry
+
+terraform/keys
+terraform/.terraform
